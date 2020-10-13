@@ -1,0 +1,8 @@
+language: python
+python:
+  - "3.6"      # current default Python on Travis CI
+# command to install dependencies
+install:
+  - pip install -r requirements.txt
+script:
+  - pytest test_nestdeviceaccess.py
