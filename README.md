@@ -1,6 +1,6 @@
 # python-nestdeviceaccess
 
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) [![Build Status](https://travis-ci.com/nahum365/python-nestdeviceaccess.svg?branch=master)](https://travis-ci.com/nahum365/python-nestdeviceaccess)
 
 A Python wrapper around the Nest Device Access API. For use in integrating Nest Devices into other smart home systems.
 
