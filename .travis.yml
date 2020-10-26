@@ -6,3 +6,6 @@ install:
   - pip install -r requirements.txt
 script:
   - pytest nestdeviceaccess/test_nestdeviceaccess.py
+  - coverage run -m pytest nestdeviceaccess/test_nestdeviceaccess.py
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
