@@ -5,6 +5,7 @@ python:
 install:
   - pip install -r requirements.txt
 script:
+  - flake8 nestdeviceaccess/
   - pytest nestdeviceaccess/test_nestdeviceaccess.py
   - coverage run -m pytest nestdeviceaccess/test_nestdeviceaccess.py
 after_success:
