@@ -5,7 +5,9 @@ import os
 AUTH_URI = "https://www.googleapis.com/oauth2/v4/token"
 DEFAULT_BASE_URI = "https://smartdevicemanagement.googleapis.com/v1"
 DEFAULT_REDIRECT_URI = "https://www.google.com"
-DEVICES_URI = "https://smartdevicemanagement.googleapis.com/v1/enterprises/{project_id}/devices"
+DEVICES_URI = (
+    "https://smartdevicemanagement.googleapis.com/v1/enterprises/{project_id}/devices"
+)
 
 
 class ArgumentsMissingError(Exception):
@@ -17,8 +19,16 @@ class AuthorizationError(Exception):
 
 
 class NestDeviceAccessAuth(requests.auth.AuthBase):
-    def __init__(self, project_id, client_id, client_secret, code, session=None, redirect_uri=DEFAULT_REDIRECT_URI):
-        if not project_id or not client_id or not client_secret or client_id == "" or client_secret == "" or project_id == "":
+    def __init__(
+        self,
+        project_id,
+        client_id,
+        client_secret,
+        code,
+        session=None,
+        redirect_uri=DEFAULT_REDIRECT_URI,
+    ):
+        if client_id == "" or client_secret == "" or project_id == "":
             raise ArgumentsMissingError()
 
         if not code or code == "":
@@ -44,11 +54,13 @@ class NestDeviceAccessAuth(requests.auth.AuthBase):
                 self.refresh_token = creds["refresh"]
                 return
 
-        data = {'client_id': self.client_id,
-                'client_secret': self.client_secret,
-                'code': self.code,
-                'grant_type': 'authorization_code',
-                'redirect_uri': self.redirect_uri}
+        data = {
+            "client_id": self.client_id,
+            "client_secret": self.client_secret,
+            "code": self.code,
+            "grant_type": "authorization_code",
+            "redirect_uri": self.redirect_uri,
+        }
         response = requests.post(AUTH_URI, params=data)
         if response.status_code != 200:
             if response.status_code == 400:
@@ -59,7 +71,9 @@ class NestDeviceAccessAuth(requests.auth.AuthBase):
         self.refresh_token = self._res["refresh_token"]
 
         with open("auth.bak", "wb") as token:
-            pickle.dump({"access": self.access_token, "refresh": self.refresh_token}, token)
+            pickle.dump(
+                {"access": self.access_token, "refresh": self.refresh_token}, token
+            )
 
     def __call__(self, r):
         if self.access_token is not None:
@@ -74,7 +88,8 @@ class NestDeviceAccessAuth(requests.auth.AuthBase):
         print(
             f"Go to this link to get OAuth token: https://nestservices.google.com/partnerconnections/{self.project_id}"
             f"/auth?redirect_uri=https://www.google.com&access_type=offline&prompt=consent&client_id={self.client_id}"
-            f"&response_type=code&scope=https://www.googleapis.com/auth/sdm.service")
+            f"&response_type=code&scope=https://www.googleapis.com/auth/sdm.service"
+        )
 
 
 class Device(object):
@@ -85,8 +100,17 @@ class Device(object):
 
 
 class NestDeviceAccess(object):
-    def __init__(self, project_id, client_id, client_secret, code, redirect_uri=DEFAULT_REDIRECT_URI):
-        self.auth = NestDeviceAccessAuth(project_id, client_id, client_secret, code, redirect_uri)
+    def __init__(
+        self,
+        project_id,
+        client_id,
+        client_secret,
+        code,
+        redirect_uri=DEFAULT_REDIRECT_URI,
+    ):
+        self.auth = NestDeviceAccessAuth(
+            project_id, client_id, client_secret, code, redirect_uri
+        )
         self.access_token = None
         self.refresh_token = None
 
@@ -102,7 +126,9 @@ class NestDeviceAccess(object):
             pass
 
     def devices(self):
-        response = requests.get(DEVICES_URI.format(project_id=self.project_id), auth=self.auth)
+        response = requests.get(
+            DEVICES_URI.format(project_id=self.project_id), auth=self.auth
+        )
         if response.status_code != 200:
             if response.status_code == 400:
                 raise AuthorizationError(response)
@@ -119,7 +145,8 @@ if __name__ == "__main__":
         project_id="2a7ad63f-af0f-414a-b218-23dd6b39d0c5",
         client_id="484808906646-a9tche4b03q56u47fiojh04tbf7r56m8.apps.googleusercontent.com",
         client_secret="uS-rH6Fqcr_d_vsTHpZOZd6l",
-        code="4/0AY0e-g6INJsCbfeHVxZV_Eg1jSEdWaxI22DgTfxUFTbPSBMXAEexjT_4VY9Rf1H5jht-hQ")
+        code="4/0AY0e-g6INJsCbfeHVxZV_Eg1jSEdWaxI22DgTfxUFTbPSBMXAEexjT_4VY9Rf1H5jht-hQ",
+    )
     nda.login()
     for device in nda.devices():
         print(device.name)
