@@ -127,6 +127,9 @@ class NestDeviceAccess(object):
             pass
 
     def devices(self):
+        if not self.auth.access_token:
+            raise AuthorizationError()
+
         response = requests.get(
             DEVICES_URI.format(project_id=self.project_id), auth=self.auth
         )

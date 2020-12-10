@@ -19,3 +19,9 @@ def test_url_printed_when_auth_code_not_present(capsys):
                                "https://nestservices.google.com/partnerconnections/123/auth?redirect_uri=https://www" \
                                ".google.com&access_type=offline&prompt=consent&client_id=123&response_type=code&scope" \
                                "=https://www.googleapis.com/auth/sdm.service\n"
+
+
+def test_devices_call_without_login_fails():
+    with pytest.raises(nestdeviceaccess.AuthorizationError):
+        nda = nestdeviceaccess.NestDeviceAccess(project_id="123", client_secret="123", client_id="123", code="123")
+        nda.devices()
