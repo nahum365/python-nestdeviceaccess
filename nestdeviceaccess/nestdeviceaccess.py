@@ -31,18 +31,19 @@ class NestDeviceAccessAuth(requests.auth.AuthBase):
         if client_id == "" or client_secret == "" or project_id == "":
             raise ArgumentsMissingError()
 
+        self.project_id = project_id
+        self.client_id = client_id
+        self.client_secret = client_secret
+
         if not code or code == "":
             self.invalid_token()
             raise ArgumentsMissingError()
 
+        self.code = code
+
         self._res = {}
         self.access_token = None
         self.refresh_token = None
-
-        self.project_id = project_id
-        self.client_id = client_id
-        self.client_secret = client_secret
-        self.code = code
         self.redirect_uri = redirect_uri
         self._session = session
 
