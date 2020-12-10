@@ -9,3 +9,17 @@ It allows interfacing with:
 Coming soon:
 
 - Nest thermostat
+
+## Demo
+
+```
+nda = NestDeviceAccess(
+    project_id="PROJECT_ID",
+    client_id="CLIENT_ID",
+    client_secret="CLIENT_SECRET",
+    code="OAUTH_CODE",
+)
+nda.login()
+for device in nda.devices():
+    print(device.name)
+```
