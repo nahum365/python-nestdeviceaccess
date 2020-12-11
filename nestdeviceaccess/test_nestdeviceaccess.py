@@ -72,3 +72,17 @@ def test_create_device():
     assert device.device_id == "device_id"
     assert device.type == "type"
     assert device.traits == {"trait": "trait"}
+
+
+def test_create_camera_stream_with_non_camera():
+    response = {
+        "name": "0/1/2/device_id",
+        "type": "type",
+        "traits": {"trait": "trait"}
+    }
+    device = nestdeviceaccess.Device(response)
+
+    nda = nestdeviceaccess.NestDeviceAccess(project_id="123", client_secret="123", client_id="123", code="123")
+
+    with pytest.raises(nestdeviceaccess.InvalidActionError):
+        nda.get_camera_stream(device)
