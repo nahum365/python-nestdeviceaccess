@@ -58,3 +58,17 @@ def test_create_camera_stream():
     assert camera_stream.rtsp_stream_url == "rtsp://123.com"
     assert camera_stream.stream_token == "token"
     assert camera_stream.expires_at == datetime.strptime("2020-01-01T00:00:01.000Z", "%Y-%m-%dT%H:%M:%S.%fZ")
+
+
+def test_create_device():
+    response = {
+        "name": "0/1/2/device_id",
+        "type": "type",
+        "traits": {"trait": "trait"}
+    }
+
+    device = nestdeviceaccess.Device(response)
+    assert device.name == "0/1/2/device_id"
+    assert device.device_id == "device_id"
+    assert device.type == "type"
+    assert device.traits == {"trait": "trait"}
