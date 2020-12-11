@@ -5,13 +5,16 @@ import pickle
 import os
 
 AUTH_URI = "https://www.googleapis.com/oauth2/v4/token"
-REFRESH_URI = "https://www.googleapis.com/oauth2/v4/token?client_id={client_id}&client_secret={client_secret}&refresh_token={refresh_token}&grant_type=refresh_token"
+REFRESH_URI = "https://www.googleapis.com/oauth2/v4/token?client_id={client_id}" \
+              "&client_secret={client_secret}&refresh_token={refresh_token}" \
+              "&grant_type=refresh_token"
 DEFAULT_BASE_URI = "https://smartdevicemanagement.googleapis.com/v1"
 DEFAULT_REDIRECT_URI = "https://www.google.com"
 DEVICES_URI = (
     "https://smartdevicemanagement.googleapis.com/v1/enterprises/{project_id}/devices"
 )
-EXECUTE_COMMAND_URI = "https://smartdevicemanagement.googleapis.com/v1/enterprises/{project_id}/devices/{device_id}:executeCommand"
+EXECUTE_COMMAND_URI = "https://smartdevicemanagement.googleapis.com/v1/enterprises/" \
+                      "{project_id}/devices/{device_id}:executeCommand"
 
 
 class ArgumentsMissingError(Exception):
@@ -187,7 +190,8 @@ class NestDeviceAccess(object):
             "command": "sdm.devices.commands.CameraLiveStream.GenerateRtspStream",
             "params": {}
         }
-        response = requests.post(EXECUTE_COMMAND_URI.format(project_id=self.project_id, device_id=device.device_id),
+        response = requests.post(EXECUTE_COMMAND_URI.format(project_id=self.project_id,
+                                                            device_id=device.device_id),
                                  json=data,
                                  auth=self.auth)
         return CameraStream(response.json())

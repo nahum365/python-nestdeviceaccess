@@ -2,6 +2,7 @@ import pytest
 import nestdeviceaccess
 from datetime import datetime
 
+
 def test_require_all_arguments():
     with pytest.raises(nestdeviceaccess.ArgumentsMissingError):
         _ = nestdeviceaccess.NestDeviceAccess(project_id="", client_secret="", client_id="", code="")
